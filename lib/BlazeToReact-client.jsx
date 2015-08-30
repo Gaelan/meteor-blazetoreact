@@ -1,3 +1,9 @@
+const Passthrough = React.createClass({
+    render() {
+        return this.props.elements;
+    }
+})
+
 BlazeToReact = function(name) {
   return React.createClass({
     shouldComponentUpdate() {
@@ -7,7 +13,12 @@ BlazeToReact = function(name) {
 
     componentDidMount() {
       let el = React.findDOMNode(this);
-      this.blazeView = Blaze.renderWithData(Template[name], this.props, el);
+      this.blazeView = Blaze.renderWithData(Template['BlazeToReactHelper'], {
+          template: name,
+          data: _.omit(this.props, 'children'),
+          component: Passthrough,
+          elements: this.props.children
+      }, el);
     },
 
     componentWillUnmount() {
